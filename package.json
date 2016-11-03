@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "a Telegraf middleware for reading data from google sheets",
   "main": "index.js",
+  "engines": {
+    "node": ">=7.0"
+  },
   "repository": {
     "url": "git@github.com:fczuardi/telegraf-googlesheets.git",
     "type": "git"
