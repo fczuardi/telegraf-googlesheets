@@ -11,5 +11,12 @@
   "license": "MIT",
   "dependencies": {
     "googleapis": "^14.1.0"
+  },
+  "eslintConfig": {
+    "extends": "mnmo"
+  },
+  "devDependencies": {
+    "eslint": "^3.9.1",
+    "eslint-config-mnmo": "^3.0.0"
   }
 }
