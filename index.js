@@ -25,6 +25,7 @@ const getSheetName = range => {
 // `Sheet1!A1:k' the values will be accessible under ```ctx.sheets['Sheet1']```
 const createMiddleware = params => (ctx, next) => {
     const sheetName = getSheetName(params.range);
+    ctx.replyWithChatAction('typing');
     gsheets.spreadsheets.values.get(params, (err, response) => {
         if (err) {
             console.error(err);
