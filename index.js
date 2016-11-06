@@ -40,18 +40,19 @@ const appendRow = params => new Promise((resolve, reject) =>
 // `Sheet1!A1:k' the values will be accessible under ```ctx.sheets['Sheet1']```
 const createMiddleware = params => (ctx, next) => {
     const sheetName = getSheetName(params.range);
-    ctx.replyWithChatAction('typing');
-    gsheets.spreadsheets.values.get(params, (err, response) => {
-        if (err) {
-            return console.error(err);
-        }
-        const sheet = response.values;
-        const stateSheets = ctx.state.sheets || {};
-        const nextSheets = extend(stateSheets, { [sheetName]: sheet });
-        const nextState = extend(ctx.state, { sheets: nextSheets });
-        ctx.state = nextState; // eslint-disable-line
-        return next();
-    });
+    ctx.replyWithChatAction('typing').then(() => 
+        gsheets.spreadsheets.values.get(params, (err, response) => {
+            if (err) {
+                return console.error(err);
+            }
+            const sheet = response.values;
+            const stateSheets = ctx.state.sheets || {};
+            const nextSheets = extend(stateSheets, { [sheetName]: sheet });
+            const nextState = extend(ctx.state, { sheets: nextSheets });
+            ctx.state = nextState; // eslint-disable-line
+            return next();
+        })
+    );
 };
 
 const tgs =
