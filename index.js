@@ -9,6 +9,21 @@ const getSheetName = range => {
     return matches ? matches[1] : 'Sheet1';
 };
 
+const getSheetId = url => {
+    const pattern = new RegExp('/spreadsheets/d/([a-zA-Z0-9-_]+)');
+    return url.match(pattern)[1];
+};
+
+const appendRow = params => new Promise((resolve, reject) =>
+    gsheets.spreadsheets.values.append(params, (err, response) => {
+        if (err) {
+            console.error(err);
+            return reject(err);
+        }
+        return resolve(response);
+    })
+);
+
 // Setup a middleware that will read a range of values from a
 // Google Sheets Spreadsheet range and add the values in the context state
 //
@@ -28,8 +43,7 @@ const createMiddleware = params => (ctx, next) => {
     ctx.replyWithChatAction('typing');
     gsheets.spreadsheets.values.get(params, (err, response) => {
         if (err) {
-            console.error(err);
-            return err;
+            return console.error(err);
         }
         const sheet = response.values;
         const stateSheets = ctx.state.sheets || {};
@@ -40,5 +54,12 @@ const createMiddleware = params => (ctx, next) => {
     });
 };
 
-module.exports = { createMiddleware, getSheetName };
+const tgs =
+    { getSheetName
+    , getSheetId
+    , appendRow
+    , createMiddleware
+    };
+
+module.exports = tgs;
 
